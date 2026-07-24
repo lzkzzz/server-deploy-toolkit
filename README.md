@@ -2,6 +2,61 @@
 
 服务器自动化部署与运维工具箱——把实施工程师的手工活写成脚本，一行命令搞定。
 
+[![CI](https://github.com/lzkzzz/server-deploy-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/lzkzzz/server-deploy-toolkit/actions)
+[![Shell](https://img.shields.io/badge/Shell-600%2B_lines-4EAA25?logo=gnu-bash&logoColor=white)](https://github.com/lzkzzz/server-deploy-toolkit)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://github.com/lzkzzz/server-deploy-toolkit)
+[![Docker](https://img.shields.io/badge/Docker_Compose-LNMP-2496ED?logo=docker&logoColor=white)](https://github.com/lzkzzz/server-deploy-toolkit)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 运行演示
+
+```console
+# 服务器初始化
+$ sudo bash init_server.sh
+============================================
+  server-deploy-toolkit - 服务器初始化脚本
+============================================
+
+[INFO] 检测到系统类型：centos
+[INFO] 正在安装基础软件包...
+[INFO] 基础软件包安装完成
+[INFO] 正在关闭 SELinux...
+[INFO] SELinux 已关闭
+[INFO] 正在配置防火墙...
+[INFO] 防火墙配置完成（已开放 22, 80, 443 端口）
+[INFO] 正在创建运维账号 ops ...
+[INFO] 运维账号 ops 创建完成
+[INFO] 正在设置时区...
+[INFO] 时区已设置为 Asia/Shanghai
+[INFO] 正在优化系统参数...
+[INFO] 系统参数优化完成
+[INFO] 初始化完成！
+
+# 启动 LNMP 环境
+$ docker compose up -d
+[+] Running 5/5
+ ✔ Network app-net   Created
+ ✔ Container redis   Healthy
+ ✔ Container php     Healthy
+ ✔ Container mysql   Healthy
+ ✔ Container nginx   Started
+
+# 健康检查
+$ python health_check.py
+==================================================
+  服务健康检查报告
+  时间：2025-07-24 10:30:00
+==================================================
+  ✅ Nginx           (12.34ms)
+  ✅ PHP-FPM         (1.23ms)
+  ✅ MySQL           (3.45ms)
+  ✅ Redis           (0.89ms)
+  ✅ Docker Daemon   (2.10ms)
+  ✅ SSH Daemon      (5.67ms)
+--------------------------------------------------
+  总计: 6 | 正常: 6 | 异常: 0
+```
+
 ## 工作流程
 
 ```
