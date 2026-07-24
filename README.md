@@ -63,7 +63,7 @@ $ python health_check.py
 flowchart TD
     A["📦 install.sh<br/>一键安装<br/><sub>检测 OS → 装依赖 → 克隆仓库 → 配环境</sub>"] --> B
 
-    subgraph P1["🔧 Phase 1 · 环境初始化"]
+    subgraph P1["　🔧 Phase 1 · 环境初始化　"]
         B["init_server.sh<br/><sub>检测OS · 装包 · 关SELinux</sub><br/><sub>配防火墙 · 建账号 · 调优</sub>"] --> C
         C["docker compose up -d<br/><sub>容器编排 + 健康检查</sub>"]
         C --> D["🐳 LNMP 全栈环境<br/>Nginx 1.26 · PHP 8.3<br/>MySQL 8.0 · Redis 7"]
@@ -71,7 +71,7 @@ flowchart TD
 
     P1 --> P2
 
-    subgraph P2["🔄 Phase 2 · 日常运维"]
+    subgraph P2["　🔄 Phase 2 · 日常运维　"]
         direction LR
         E["deploy.sh<br/><sub>备份→部署→健康检查→回滚</sub>"]
         F["backup.sh<br/><sub>mysqldump + binlog</sub><br/><sub>过期清理 + 完整性校验</sub>"]
@@ -81,10 +81,17 @@ flowchart TD
 
     P2 --> CRON["⏰ crontab 定时任务<br/>backup 每日 2:00 · health_check 每5分钟 · log_analyzer 每日 8:00"]
 
-    style A fill:#1a1a2e,stroke:#58a6ff,color:#c9d1d9
-    style P1 fill:#0d1117,stroke:#3fb950,color:#c9d1d9
-    style P2 fill:#0d1117,stroke:#d2991d,color:#c9d1d9
-    style CRON fill:#1a1a2e,stroke:#8b949e,color:#8b949e
+    style A fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    style B fill:#f0fdf4,stroke:#16a34a,color:#14532d
+    style C fill:#f0fdf4,stroke:#16a34a,color:#14532d
+    style D fill:#dcfce7,stroke:#22c55e,color:#14532d
+    style P1 fill:#f0fdf4,stroke:#22c55e,color:#14532d
+    style E fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
+    style F fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
+    style G fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
+    style H fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
+    style P2 fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
+    style CRON fill:#f8fafc,stroke:#64748b,color:#334155
 ```
 
 ## 功能列表
