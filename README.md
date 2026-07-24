@@ -59,45 +59,32 @@ $ python health_check.py
 
 ## 工作流程
 
-```
-                              ┌──────────────────────────────────────────────────┐
-                              │               📦 一键安装                         │
-                              │   curl -sSL .../install.sh | sudo bash           │
-                              │   自动检测 OS → 装依赖 → 克隆仓库 → 配置环境        │
-                              └──────────────────────┬───────────────────────────┘
-                                                     │
-              ┌──────────────────────────────────────┼──────────────────────────────────────┐
-              │                       🔧 Phase 1：环境初始化                                │
-              │                                      │                                      │
-              │     ┌────────────────────┐    ┌──────▼──────────┐    ┌──────────────────┐  │
-              │     │  init_server.sh    │───▶│ docker compose   │───▶│   LNMP 全栈环境   │  │
-              │     │  检测OS·装包·      │    │ up -d            │    │  Nginx 1.26      │  │
-              │     │  关SELinux·配防火墙 │    │ 容器编排+健康检查  │    │  PHP 8.3         │  │
-              │     │  建账号·时区·调优   │    │                  │    │  MySQL 8.0       │  │
-              │     └────────────────────┘    └─────────────────┘    │  Redis 7         │  │
-              │                                                      └──────┬───────────┘  │
-              └─────────────────────────────────────────────────────────────┼──────────────┘
-                                                                            │
-              ┌─────────────────────────────────────────────────────────────┼──────────────┐
-              │                                      🔄 Phase 2：日常运维                    │
-              │                                                             │              │
-              │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐                 │
-              │  │   deploy.sh     │  │   backup.sh     │  │health_check │                 │
-              │  │                 │  │                 │  │    .py      │                 │
-              │  │  备份→部署→      │  │  mysqldump 全量  │  │             │                 │
-              │  │  健康检查→      │  │  binlog 增量    │  │  HTTP/TCP/  │                 │
-              │  │  失败自动回滚    │  │  过期清理+校验   │  │  进程 并发检测 │                 │
-              │  │                 │  │                 │  │  Webhook告警 │                 │
-              │  └─────────────────┘  └─────────────────┘  └─────────────┘                 │
-              │                                                                             │
-              │                    ┌──────────────────────────────┐                         │
-              │                    │       log_analyzer.sh        │                         │
-              │                    │  Nginx / 系统 / Docker /     │                         │
-              │                    │  MySQL 慢查询 日志分析+异常检测│                         │
-              │                    └──────────────────────────────┘                         │
-              │                                                                             │
-              │   crontab 定时：backup(2:00) · health_check(*/5min) · log_analyzer(8:00)   │
-              └─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    A["📦 install.sh<br/>一键安装<br/><sub>检测 OS → 装依赖 → 克隆仓库 → 配环境</sub>"] --> B
+
+    subgraph P1["🔧 Phase 1 · 环境初始化"]
+        B["init_server.sh<br/><sub>检测OS · 装包 · 关SELinux</sub><br/><sub>配防火墙 · 建账号 · 调优</sub>"] --> C
+        C["docker compose up -d<br/><sub>容器编排 + 健康检查</sub>"]
+        C --> D["🐳 LNMP 全栈环境<br/>Nginx 1.26 · PHP 8.3<br/>MySQL 8.0 · Redis 7"]
+    end
+
+    P1 --> P2
+
+    subgraph P2["🔄 Phase 2 · 日常运维"]
+        direction LR
+        E["deploy.sh<br/><sub>备份→部署→健康检查→回滚</sub>"]
+        F["backup.sh<br/><sub>mysqldump + binlog</sub><br/><sub>过期清理 + 完整性校验</sub>"]
+        G["health_check.py<br/><sub>HTTP/TCP/进程 并发检测</sub><br/><sub>钉钉/企微 Webhook 告警</sub>"]
+        H["log_analyzer.sh<br/><sub>Nginx · 系统 · Docker</sub><br/><sub>MySQL 慢查询分析</sub>"]
+    end
+
+    P2 --> CRON["⏰ crontab 定时任务<br/>backup 每日 2:00 · health_check 每5分钟 · log_analyzer 每日 8:00"]
+
+    style A fill:#1a1a2e,stroke:#58a6ff,color:#c9d1d9
+    style P1 fill:#0d1117,stroke:#3fb950,color:#c9d1d9
+    style P2 fill:#0d1117,stroke:#d2991d,color:#c9d1d9
+    style CRON fill:#1a1a2e,stroke:#8b949e,color:#8b949e
 ```
 
 ## 功能列表
