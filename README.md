@@ -28,17 +28,17 @@
 
 ## 功能列表
 
-| 脚本 | 行数 | 功能 | 面试可以这样说 |
+| 脚本 | 行数 | 功能 | 技能关键词 |
 |------|------|------|---------|
-| `init_server.sh` | 160 | 服务器初始化（装包/关SELinux/配防火墙/建账号/调优） | "能自动识别 CentOS/Ubuntu，装完包、关掉 SELinux、配好防火墙、建好运维账号" |
-| `deploy.sh` | 170 | 应用自动部署+健康检查+自动回滚 | "部署前自动备份旧版→部署新版→等健康检查通过→失败了自动回滚，不需要人工盯着" |
-| `health_check.py` | 180 | 多线程健康监控（HTTP/TCP/进程）+钉钉/企微告警 | "Python 多线程并发检测 6 项服务，Nginx 挂了 5 秒内能收到钉钉告警" |
-| `backup.sh` | 130 | MySQL 全量+ binlog 增量备份+自动清理 | "mysqldump 全量 + binlog 增量备份，保留 7 天自动删除，备份完自动校验文件有没有坏" |
-| `log_analyzer.sh` | 150 | 日志分析（Nginx 状态码/IP/慢请求、系统错误、Docker） | "能分析 Nginx 的 4xx/5xx 错误比例、哪些 IP 在刷接口、系统有没有 OOM、SSH 有没有爆破" |
-| `install.sh` | 100 | 一条命令安装本工具到任意服务器 | "curl 管道 sudo bash，自动装依赖→克隆代码→建配置→配别名" |
-| `test_runner.sh` | 120 | 脚本自测（语法/函数/配置完整性） | "提交前自动跑：语法检查、关键函数是否存在、配置文件有没有丢、有没有 set -e 错误处理" |
-| `docker-compose.yml` | — | LNMP 容器编排+健康检查+资源限制 | "一个 yml 文件拉起 Nginx + MySQL + Redis + PHP-FPM，每个容器都配了健康检查和自动重启" |
-| `.env.example` | — | 集中配置管理 | "密码、路径、告警链接全放在 .env 里，不硬编码进脚本" |
+| `init_server.sh` | 160 | 服务器初始化（装包/关SELinux/配防火墙/建账号/调优） | Shell 脚本、OS 兼容、SELinux、firewalld/ufw、系统调优 |
+| `deploy.sh` | 170 | 应用自动部署+健康检查+自动回滚 | 蓝绿部署、回滚策略、参数解析、进程管理 |
+| `health_check.py` | 180 | 多线程健康监控（HTTP/TCP/进程）+钉钉/企微告警 | Python 多线程、Socket、HTTP 探活、Webhook |
+| `backup.sh` | 130 | MySQL 全量+ binlog 增量备份+自动清理 | mysqldump、binlog、备份策略、Gzip 校验 |
+| `log_analyzer.sh` | 150 | 日志分析（Nginx 状态码/IP/慢请求、系统错误、Docker） | awk、journalctl、慢查询、异常检测 |
+| `install.sh` | 100 | 一条命令安装本工具到任意服务器 | 自动化安装、依赖检测、环境配置 |
+| `test_runner.sh` | 120 | 脚本自测（语法/函数/配置完整性） | 自动化测试、CI 前置、代码规范 |
+| `docker-compose.yml` | — | LNMP 容器编排+健康检查+资源限制 | Docker Compose、多服务编排、健康检查 |
+| `.env.example` | — | 集中配置管理 | 12-Factor App、环境变量、安全配置 |
 
 ## 快速开始
 
