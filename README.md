@@ -60,26 +60,30 @@ $ python health_check.py
 ## 工作流程
 
 ```mermaid
-flowchart TD
-    A["📦 install.sh<br/>一键安装<br/><sub>检测 OS → 装依赖 → 克隆仓库 → 配环境</sub>"] --> B
+flowchart TB
+    A["📦 install.sh — 一键安装<br/>检测 OS → 装依赖 → 克隆仓库 → 配置环境"] --> B
 
-    subgraph P1["　🔧 Phase 1 · 环境初始化　"]
-        B["init_server.sh<br/><sub>检测OS · 装包 · 关SELinux</sub><br/><sub>配防火墙 · 建账号 · 调优</sub>"] --> C
-        C["docker compose up -d<br/><sub>容器编排 + 健康检查</sub>"]
-        C --> D["🐳 LNMP 全栈环境<br/>Nginx 1.26 · PHP 8.3<br/>MySQL 8.0 · Redis 7"]
+    subgraph P1["🔧 Phase 1 · 环境初始化"]
+        direction TB
+        B["init_server.sh — 服务器初始化<br/>检测OS · 装包 · 关SELinux · 配防火墙 · 建账号 · 调优"]
+        C["docker compose up -d — 容器编排<br/>Nginx + PHP + MySQL + Redis 全栈启动"]
+        D["✅ LNMP 环境就绪<br/>Nginx 1.26 · PHP 8.3 · MySQL 8.0 · Redis 7"]
+        B --> C --> D
     end
 
     P1 --> P2
 
-    subgraph P2["　🔄 Phase 2 · 日常运维　"]
+    subgraph P2["🔄 Phase 2 · 日常运维（4 大工具）"]
         direction LR
-        E["deploy.sh<br/><sub>备份→部署→健康检查→回滚</sub>"]
-        F["backup.sh<br/><sub>mysqldump + binlog</sub><br/><sub>过期清理 + 完整性校验</sub>"]
-        G["health_check.py<br/><sub>HTTP/TCP/进程 并发检测</sub><br/><sub>钉钉/企微 Webhook 告警</sub>"]
-        H["log_analyzer.sh<br/><sub>Nginx · 系统 · Docker</sub><br/><sub>MySQL 慢查询分析</sub>"]
+        E["deploy.sh<br/>应用部署 + 自动回滚<br/>备份→部署→检查→回滚"]
+        F["backup.sh<br/>数据库全量 + 增量备份<br/>mysqldump + binlog"]
+        G["health_check.py<br/>多线程健康监控<br/>HTTP/TCP/进程 + 告警"]
+        H["log_analyzer.sh<br/>日志分析 + 异常检测<br/>Nginx · 系统 · Docker"]
     end
 
-    P2 --> CRON["⏰ crontab 定时任务<br/>backup 每日 2:00 · health_check 每5分钟 · log_analyzer 每日 8:00"]
+    P2 --> I
+
+    I["⏰ crontab 定时任务<br/>backup 每日 2:00 ｜ health_check 每5分钟 ｜ log_analyzer 每日 8:00"]
 
     style A fill:#fff7ed,stroke:#ea580c,color:#7c2d12
     style B fill:#f0fdf4,stroke:#16a34a,color:#14532d
@@ -91,7 +95,7 @@ flowchart TD
     style G fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
     style H fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
     style P2 fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
-    style CRON fill:#f8fafc,stroke:#64748b,color:#334155
+    style I fill:#f8fafc,stroke:#64748b,color:#334155
 ```
 
 ## 功能列表
